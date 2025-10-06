@@ -113,13 +113,14 @@ def move():
         return jsonify(result)
     
     # AI makes a move
+    if " " not in board:
+        winner = "Draw"
     AI_move()
     
     winner = None
     if check_winner("O"):
         winner = "O"
-    elif " " not in board:
-        winner = "Draw"
+    
     
     result = {"board": board.copy(), "winner": winner}
     
