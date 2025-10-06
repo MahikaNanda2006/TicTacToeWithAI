@@ -132,7 +132,7 @@ def move():
     if winner:
         reset_board()
     
-    return jsonify(result)
+    #return jsonify(result)
 
 @app.route("/")
 def home():
