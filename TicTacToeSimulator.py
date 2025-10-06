@@ -116,13 +116,17 @@ def move():
 
     if " " not in board:
         winner = "Draw"
+        result = {"board": board.copy(), "winner": winner}
+        return jsonify(result)
     # AI makes a move
     AI_move()
     if check_winner("O"):
         winner = "O"
+        result = {"board": board.copy(), "winner": winner}
+        return jsonify(result)
 
    
-    result = {"board": board.copy(), "winner": winner}
+    
     
     # Only reset after sending the board to client
     if winner:
