@@ -126,7 +126,7 @@ def move():
         return jsonify(result)
 
    
-    
+    return jsonify({"board": board.copy(), "winner": None})
     
     # Only reset after sending the board to client
     if winner:
