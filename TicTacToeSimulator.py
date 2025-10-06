@@ -126,13 +126,13 @@ def move():
         return jsonify(result)
 
    
-    return jsonify({"board": board.copy(), "winner": None})
+    result = {"board": board.copy(), "winner": None}
     
     # Only reset after sending the board to client
     if winner:
         reset_board()
     
-    #return jsonify(result)
+    return jsonify(result)
 
 @app.route("/")
 def home():
