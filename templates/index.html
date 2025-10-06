@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic-Tac-Toe AI</title>
+    <style>
+    body {
+        background-color: #f7e6e6; /* soft blush */
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        margin: 0;
+        padding: 40px 0;
+        color: #333;
+    }
+
+    h1 {
+        color: #d18c95; /* muted rose */
+        margin-bottom: 20px;
+        font-size: 3em;
+        text-shadow: 1px 1px 2px #fff;
+    }
+
+    #board {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(3, 100px);
+        gap: 10px;
+        background-color: #e8cfd0; /* gentle muted pink */
+        padding: 10px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .cell {
+        background-color: #f4d3d4; /* light blush */
+        width: 100px;
+        height: 100px;
+        font-size: 2.5em;
+        font-weight: bold;
+        text-align: center;
+        line-height: 100px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .cell:hover {
+        background-color: #d8aeb2; /* subtle darker blush */
+        transform: scale(1.05);
+    }
+
+    #status {
+        margin-top: 30px;
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #b1535a; /* deep rose for contrast */
+        text-shadow: 1px 1px 2px #fff;
+    }
+
+    .highlight {
+        background-color: #c87c81 !important;
+        animation: pulse 0.8s infinite alternate;
+    }
+
+    @keyframes pulse {
+        from { transform: scale(1); }
+        to { transform: scale(1.1); }
+    }
+</style>
+
+>
+</head>
+<body>
+    <h1>Tic-Tac-Toe AI</h1>
+    <div id="board">
+        <div class="cell" data-pos="0"></div>
+        <div class="cell" data-pos="1"></div>
+        <div class="cell" data-pos="2"></div>
+        <div class="cell" data-pos="3"></div>
+        <div class="cell" data-pos="4"></div>
+        <div class="cell" data-pos="5"></div>
+        <div class="cell" data-pos="6"></div>
+        <div class="cell" data-pos="7"></div>
+        <div class="cell" data-pos="8"></div>
+    </div>
+    <p id="status"></p>
+
+    <script>
+        const cells = document.querySelectorAll(".cell");
+        const status = document.getElementById("status");
+
+        cells.forEach(cell => {
+    cell.addEventListener("click", () => {
+        const pos = cell.dataset.pos;
+        fetch("/move", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ position: parseInt(pos) })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Update board with the latest state first
+            data.board.forEach((val, idx) => {
+                cells[idx].textContent = val;
+            });
+
+            // If there is a winner or draw
+            if(data.winner){
+                if(data.winner === "Draw") status.textContent = "It's a draw!";
+                else status.textContent = data.winner + " wins!";
+                
+                // Wait 3 seconds before reloading
+                setTimeout(() => location.reload(), 3000);
+            }
+        });
+    });
+});
+    </script>
+</body>
+</html>
