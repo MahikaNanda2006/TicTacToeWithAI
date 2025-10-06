@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-
+import os
 
 app = Flask(__name__)
 #Step 1: We want to make a grid
@@ -137,5 +137,8 @@ def reset_board():
     global board
     board = [" "]*9
 
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
