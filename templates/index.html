@@ -93,8 +93,11 @@
         const cells = document.querySelectorAll(".cell");
         const status = document.getElementById("status");
 
+        let waiting = false;
         cells.forEach(cell => {
     cell.addEventListener("click", () => {
+        if(waiting) return;  // ignore clicks while processing
+        waiting = true;
         const pos = cell.dataset.pos;
         fetch("/move", {
             method: "POST",
@@ -117,6 +120,7 @@
                 setTimeout(() => location.reload(), 3000);
             }
         });
+        waiting = false;
     });
 });
     </script>
