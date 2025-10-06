@@ -110,29 +110,29 @@ def move():
     # Check if user won
     if check_winner("X"):
         result = {"board": board.copy(), "winner": "X"}
-        return jsonify(result)
-    
-    winner = None
-
-    if " " not in board:
-        winner = "Draw"
-        result = {"board": board.copy(), "winner": winner}
-        return jsonify(result)
-    # AI makes a move
-    AI_move()
-    if check_winner("O"):
-        winner = "O"
-        result = {"board": board.copy(), "winner": winner}
-        return jsonify(result)
-
-   
-    result = {"board": board.copy(), "winner": None}
-    
-    # Only reset after sending the board to client
-    if winner:
         reset_board()
+        return jsonify(result)
     
-    return jsonify(result)
+    if " " not in board:
+        result = {"board": board.copy(), "winner": "Draw"}
+        reset_board()
+        return jsonify(result)
+    
+    # AI move
+    AI_move()
+    
+    if check_winner("O"):
+        result = {"board": board.copy(), "winner": "O"}
+        reset_board()
+        return jsonify(result)
+    
+    if " " not in board:
+        result = {"board": board.copy(), "winner": "Draw"}
+        reset_board()
+        return jsonify(result)
+    
+    return jsonify({"board": board.copy(), "winner": None})
+
 
 @app.route("/")
 def home():
